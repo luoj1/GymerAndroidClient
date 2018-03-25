@@ -1,95 +1,72 @@
 import MySQLdb
 import pandas as pd
-db = MySQLdb.connect("localhost","gtapp","Git!hacks2018s","apphacks")
-cursor=db.execute()
-ls1=['LEG','CHESK','BACK','SHOULDER','BELLY']
-def create():
-    for i in ls1:
-        sql="CREATE TABLE"+ i + """(
-                 ID  INT NOT NULL AUTO_INCREMENT,
-                 NAME CHAR(20),
-                 ONE INT,
-                 TWO INT,  
-                 THREE INT,
-                 FOUR INT,
-                 FIVE INT,
-                 SIX INT,
-                 SEVEN INT,
-                 EIGHT INT,
-                 NINE INT,
-                 TEN INT,
-                 ELEVEN INT,
-                 TWELVE INT,
-                 THIRTEEN INT,
-                 FOURTEEN INT,
-                 FIFTEEN INT,
-                 SIXTEEN INT,
-                 SEVENTEEN INT,
-                 EIGHTEEN INT,
-                 NINETEEN INT,
-                 TWENTY INT,
-                 TWENTYONE INT,
-                 TWENTYTWO INT,
-                 TWENTYTHREE INT,
-                 ZERO INT,
-                 COMMENTS CHAR(100)
-                 """
-        cursor.execute(sql)
+db = MySQLdb.connect(host="localhost",user="gtapp",passwd="Git!hacks2018s",db="apphacks")
+cur=db.cursor()
 
-def insert(tp,name,one,two,three,four, five, six, seven, eight, nine, ten, eleven, twelve, thirteen, fourteen, fiveteen, sixteen, seventeen, eighteen, nineteen, twenty,twentyone,twentytwo,twentythree,zero, comments):  
-    sql = "INSERT INTO"+ tp +" ( 'NAME', 'ONE','TWO', 'FOUR', 'FIVE', 'SIX',  'SEVEN','EIGHT', 'NINE','TEN','ELEVEN','TWELVE','THIRTEEN','FOURTEEN','FIVETEEN','SIXTEEN','SEVENTEEN','EIGHTEEN','NINETEEN','TWENTY','TWENTYONE','TWENTYTWO','TWENTYTHREE', 'ZERO','COMMENTS') VALUES('%s','%d','%d','%d','%d','%d','%d','%d','%d','%d','%d','%d','%d','%d','%d','%d','%d','%d','%d','%d','%d','%d','%d','%d','%d','%s')"
-    (name,one,two,three,four, five, six, seven, eight, nine, ten, eleven, twelve, thirteen, fourteen, fiveteen, sixteen, seventeen, eighteen, nineteen, twenty,twentyone,twentytwo,twentythree,zero, comments)
+def create():
+    sql="""CREATE TABLE GYM (
+             ID  INT NOT NULL AUTO_INCREMENT,
+             NAME  CHAR(20),
+             GYM   CHAR(20),  
+             TYPE  CHAR(20),
+             TIMES CHAR(20),
+             TIMEE CHAR(20),
+             COMMENT CHAR(100)"""
+    cur.execute(sql)
+
+def insert(name,gym,tp,times,timee, comments):   
+    sql = "INSERT INTO GYM ( 'NAME', 'GYM', 'TYPE',  'TIMES', 'TIMEE, 'COMMENTS') VALUES('%s','%s','%s','%s','%s','%s')"
+    ( name,gym,tp,times,timee, comments )
     try:
-        cursor.execute(sql)
+        cur.execute(sql)
         db.commit()
     except:
        db.rollback()
 
 
-def delete(tp,name):
-    sql = "DELETE FROM"+tp+ "WHERE NAME=="+name
+def delete(name):
+    sql = "DELETE FROM GYM WHERE NAME=="+name
     try:
-        cursor.execute(sql)
+        cur.execute(sql)
         db.commit()
     except:
        db.rollback()
 
     
-def update(tp,name,one,two,three,four, five, six, seven, eight, nine, ten, eleven, twelve, thirteen, fourteen, fiveteen, sixteen, seventeen, eighteen, nineteen, twenty,twentyone,twentytwo,twentythree,zero, comments):
-    sql = "UPDATE"+ tp +"( 'NAME', 'ONE','TWO', 'FOUR', 'FIVE', 'SIX',  'SEVEN','EIGHT', 'NINE','TEN','ELEVEN','TWELVE','THIRTEEN','FOURTEEN','FIVETEEN','SIXTEEN','SEVENTEEN','EIGHTEEN','NINETEEN','TWENTY','TWENTYONE','TWENTYTWO','TWENTYTHREE', 'ZERO','COMMENTS') VALUES('%s','%d','%d','%d','%d','%d','%d','%d','%d','%d','%d','%d','%d','%d','%d','%d','%d','%d','%d','%d','%d','%d','%d','%d','%d','%s')"
-    (name,one,two,three,four, five, six, seven, eight, nine, ten, eleven, twelve, thirteen, fourteen, fiveteen, sixteen, seventeen, eighteen, nineteen, twenty,twentyone,twentytwo,twentythree,zero, comments)
+def update(name,gym,tp,times,timee, comments):
+    sql = "UPDATE GYM ( 'NAME', 'GYM', 'TYPE',  'TIMES', 'TIMEE, 'COMMENTS') VALUES('%s','%s','%s','%s','%s','%s')"
+    ( name,gym,tp,times,timee, comments )
     try:
-        cursor.execute(sql)
+        cur.execute(sql)
         db.commit()
     except:
        db.rollback()
 
 def connect(file):
-
-	return tp, name,one,two,three,four, five, six, seven, eight, nine, ten, eleven, twelve, thirteen, fourteen, fiveteen, sixteen, seventeen, eighteen, nineteen, twenty,twentyone,twentytwo,twentythree,zero, comments
+    
+	return name,gym,tp,times,timee, comments
 
 def main():
     file=open()
-    (tp, name,one,two,three,four, five, six, seven, eight, nine, ten, eleven, twelve, thirteen, fourteen, fiveteen, sixteen, seventeen, eighteen, nineteen, twenty,twentyone,twentytwo,twentythree,zero, comments)= connect(file);
-    sql = "SELECT * FROM GYM WHERE NAME=="+name
+    (name,gym,tp,times,timee, comments)= connect(file)
+    sql= 'SELECT * FROM GAMEAPP WHERE Name=='+name
     try:
         # Execute the SQL command
-       cursor.execute(sql)
+       cur.execute(sql)
        # Fetch all the rows in a list of lists.
-       ls=cursor.fetchall()
+       ls= cur.fetchall()
     except:
         print('Error!!!')
     if ls==(): 
-        insert(tp, name,one,two,three,four, five, six, seven, eight, nine, ten, eleven, twelve, thirteen, fourteen, fiveteen, sixteen, seventeen, eighteen, nineteen, twenty,twentyone,twentytwo,twentythree,zero, comments)
+    	insert(name,gym,tp,times,timee, comments)
     else:
-        a=input('whether you should update the value of delete the data? (U/D/N)')
-        a= a.upper()
+        a= input('whether you should update the value of delete the data? (U/D/N)')
+        a=a.upper()
         if a=='U':
-            	update(tp, name,one,two,three,four, five, six, seven, eight, nine, ten, eleven, twelve, thirteen, fourteen, fiveteen, sixteen, seventeen, eighteen, nineteen, twenty,twentyone,twentytwo,twentythree,zero, comments)
+            update(name,gym,tp,times,timee, comments)
         elif a=='D':
-            delete(tp,name)
-    df=db.read_sql('SELECT * FROM'+tp, con= db)
-    #give the value ans sort with it
-    df.sort(columns='B')
+            delete(name)
+    df=pd.read_sql('SELECT * FROM GAMEAPP;', con= db)
     db.close()
+    
 main()

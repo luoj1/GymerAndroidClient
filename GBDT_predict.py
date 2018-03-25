@@ -8,7 +8,7 @@ Created on Sat Mar 24 06:15:26 2018
 
 import numpy as np  
 import pandas as pd  
-from sklearn import ensemble, cross_validation  
+from sklearn import ensemble, cross_validation, mean_squared_error  
 import MySQLdb
 db = MySQLdb.connect(host="localhost",user="gtapp",passwd="Git!hacks2018s",db="apphacks")
 cur=db.cursor()
@@ -57,13 +57,13 @@ def rmspe(zip_list,count):
 
 
 def get_features_target(data):  
-    data_array=pd.np.array(data)#传入dataframe，为了遍历，先转为array  
+    data_array=pd.np.array(data) 
     features_list=[]  
     target_list=[]  
     for line in data_array:  
         temp_list=[]  
-        for i in range(0,384):#一共有384个特征  
-            if i == 360 :#index=360对应的特征是flow  
+        for i in range(0,384):
+            if i == 360 :
                 target_temp=int(line[i])  
             else:  
                 temp_list.append(int(line[i]))  
@@ -81,7 +81,7 @@ def run_demo():
     for k  in  gym:
         anly_dict[k]=gym[k][a]
     data= pd.from_dict(anly_dict, orient='columns', dtype=None)
-    data_other,data=cross_validation.train_test_split(data,test_size=0.001,random_state=10)#为了减少代码运行时间，方便测试  
+    data_other,data=cross_validation.train_test_split(data,test_size=0.001,random_state=10)
     train_and_valid, test = cross_validation.train_test_split(data, test_size=0.2, random_state=10)  
     train, valid = cross_validation.train_test_split(train_and_valid, test_size=0.01, random_state=10)  
     train_feature, train_target = get_features_target(train)  
@@ -92,9 +92,9 @@ def run_demo():
               'learning_rate': 0.01, 'loss': 'ls'}  
     clf = ensemble.GradientBoostingRegressor(**params)  
   
-    clf.fit(train_feature, train_target) #训练  
-    # mse = mean_squared_error(test_target, clf.predict(test_feature)) #预测并且计算MSE  
-    # print(mse)  
+    clf.fit(train_feature, train_target)  
+    mse = mean_squared_error(test_target, clf.predict(test_feature))   
+    print(mse)  
     pre=clf.predict(test_feature)  
     pre_list=list(pre)  
     real_pre_zip=zip(test_target,pre_list)  
